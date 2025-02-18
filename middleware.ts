@@ -6,6 +6,7 @@ interface Session {
     user: {
         id: string;
         username: string;
+        unsplashToken: string | null
     };
     expiresAt: number;
 }
@@ -14,7 +15,7 @@ export async function middleware(request: NextRequest) {
     const cookieStore = await cookies();
     const sessionCookie = cookieStore.get("session");
     let session: Session | null = null;
-
+  
     // after fetch cookies i parse and valid the session
     if (sessionCookie) {
         try {

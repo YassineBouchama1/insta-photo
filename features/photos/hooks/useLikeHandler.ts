@@ -1,10 +1,11 @@
 import { useCallback, useState } from 'react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import toast from 'react-hot-toast';
+import { createAuthenticatedApi, unsplashApi } from '@/lib/unsplash';
+import { userDb } from "@/lib/db"
+import { getServerSession } from '@/lib/session';
 
 interface UseLikeHandlerProps {
     userId: string | null;
-    initialLikes: string[];
 }
 
 export interface ApiResponse<T> {
@@ -14,77 +15,60 @@ export interface ApiResponse<T> {
 
 export function useLikeHandler({
     userId,
-    initialLikes,
+
 }: UseLikeHandlerProps) {
-    const [likes, setLikes] = useState<Set<string>>(new Set(initialLikes));
     const queryClient = useQueryClient();
 
-    //this mutation func for toggling likes
+
+
+    // Mutation function for toggling likes using Unsplash API
     const toggleLikeMutation = useMutation({
-        mutationFn: async ({ userId, photoId }: { userId: string; photoId: string }) => {
-            const res = await fetch('/api/photos/onlike', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ userId, photoId }),
-            });
-            if (!res.ok) {
-                const errorData = await res.json();
-                throw new Error(errorData.error || 'Failed to toggle like');
+        mutationFn: async ({ photoId, isLiked }: { photoId: string, isLiked: boolean }) => {
+            if (!userId) {
+                throw new Error('User ID is required');
             }
-            return res.json() as Promise<ApiResponse<{ success: boolean }>>;
+
+            const session = await getServerSession();
+            console.log(session)
+
+            const api = createAuthenticatedApi(session.user.unsplashToken)
+
+            // if already liked unlike it 
+            if (isLiked) {
+                await api.likePhoto(photoId);
+
+            } else {
+                await api.unlikePhoto(photoId);
+
+            }
+
+
+            return { success: true };
         },
         onSuccess: () => {
-            //  after  update like invalid photos
+            // Invalidate the photos query to refetch updated data
             queryClient.invalidateQueries({ queryKey: ['photos'] });
-
-
-
         },
         onError: (error) => {
             console.error('Failed to toggle like:', error);
         },
     });
 
-    //  this handle unlick and like
+    // Handle liking/unliking logic
     const handleLike = useCallback(
-        (photoId: string) => {
+        (photoId: string, isLiked: boolean) => {
             if (!userId) return;
-
-
-            // dtermine if the photo is currently liked
-            const isLiked = likes.has(photoId);
-            setLikes((prev) => {
-                const newLikes = new Set(prev);
-                if (newLikes.has(photoId)) {
-                    newLikes.delete(photoId);
-                } else {
-                    newLikes.add(photoId);
-                }
-                return newLikes;
-            });
-
-            if (isLiked) {
-                toast.success('Unliked Successfully!');
-            } else {
-                toast.success('Liked Successfully!');
-            }
 
             // Trigger the mutation
             toggleLikeMutation.mutate(
-                { userId, photoId },
+                { photoId, isLiked },
                 {
-                    onError: () => {
 
-                        setLikes((prev) => {
-                            const newLikes = new Set(prev);
-                            if (newLikes.has(photoId)) {
-                                newLikes.delete(photoId);
-                            } else {
-                                newLikes.add(photoId);
-                            }
-                            return newLikes;
-                        });
+                    onSuccess: () => {
+                        // Invalidate the photos query to refetch updated data
+                        queryClient.invalidateQueries({ queryKey: ['photos'] });
                     },
+
                 }
             );
         },
@@ -92,7 +76,7 @@ export function useLikeHandler({
     );
 
     return {
-        likes,
+
         handleLike,
         isLoading: toggleLikeMutation.isPending,
         error: toggleLikeMutation.error,

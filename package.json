@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@tanstack/react-query": "^5.66.6",
+    "axios": "^1.7.9",
     "dotenv": "^16.4.7",
     "level": "^9.0.0",
     "lucide-react": "^0.475.0",
@@ -20,7 +21,6 @@
     "react-hook-form": "^7.54.2",
     "react-hot-toast": "^2.5.2",
     "react-intersection-observer": "^9.15.1",
-    "unsplash-js": "^7.0.19",
     "zod": "^3.24.2"
   },
   "devDependencies": {

@@ -26,11 +26,18 @@ export function LoginForm({ callbackUrl = '/gallery' }: LoginFormProps) {
       setValidationError(null);
 
       try {
-        await login(username, password);
+        const response = await login(username, password); // Call the login function
 
-        toast.success('login Successfully!');
-        router.push(callbackUrl);
-        router.refresh();
+        if (response && response.data.unsplashAuthUrl) {
+
+
+          // Redirect to Unsplash auth URL if provided
+          window.location.href = response.data.unsplashAuthUrl;
+        } else {
+          // Redirect to the default callback URL if no unsplashAuthUrl is provided
+          router.push(callbackUrl);
+          toast.success('Login Successful!');
+        }
       } catch (err) {
         if (err instanceof Error) {
           setValidationError(err.message);
