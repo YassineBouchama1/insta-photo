@@ -10,9 +10,8 @@ interface LoginFormProps {
 export function LoginForm({ callbackUrl = '/gallery' }: LoginFormProps) {
   const router = useRouter();
 
-  // custom hook contai logic login
+  // fetch logic logic 
   const { login, isLoading, error } = useLogin();
-
   const [username, setUsername] = useState(useMemo(() => '', []));
   const [password, setPassword] = useState(useMemo(() => '', []));
 
@@ -31,25 +30,30 @@ export function LoginForm({ callbackUrl = '/gallery' }: LoginFormProps) {
   );
 
   return (
-    <div className="bg-white p-8 rounded-lg shadow-md w-96">
-      <h1 className="text-2xl font-bold mb-6">Welcome back</h1>
-      <form onSubmit={handleSubmit} className="space-y-4">
-        <div>
-          <label htmlFor="username" className="block text-sm font-medium text-gray-700">
-            Username
+    <div className="mx-auto max-w-xs h-full">
+      <h1 className="text-3xl font-bold mb-2 text-left">Welcome back</h1>
+      <p className="text-gray-600 mb-8 text-left">Welcome back! Please enter your details.</p>
+      <form onSubmit={handleSubmit} className='flex flex-col gap-52' >
+        {/* Email Input */}
+        <div className="mt-10">
+          <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="email">
+            Email Address
           </label>
           <input
-            id="username"
-            type="text"
+            id="email"
+            type="email"
             value={username}
             onChange={(e) => setUsername(e.target.value)}
-            className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+            className="w-full px-8 py-4 rounded-lg font-medium bg-gray-50 border border-gray-200 placeholder-gray-50 text-sm focus:outline-none focus:border-gray-400 focus:bg-white"
+            placeholder="Email"
             required
             disabled={isLoading}
           />
         </div>
-        <div>
-          <label htmlFor="password" className="block text-sm font-medium text-gray-700">
+
+        {/* Password Input */}
+        <div className="mt-10">
+          <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="password">
             Password
           </label>
           <input
@@ -57,16 +61,22 @@ export function LoginForm({ callbackUrl = '/gallery' }: LoginFormProps) {
             type="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+            className="w-full px-8 py-4 rounded-lg font-medium bg-gray-50 border border-gray-200 placeholder-gray-50 text-sm focus:outline-none focus:border-gray-400 focus:bg-white"
+            placeholder="********"
             required
             disabled={isLoading}
           />
         </div>
-        {error && <div className="text-red-500 text-sm">{error}</div>}
+
+        {/* Error Message */}
+        {error && <p className="text-red-500 text-sm mt-2">{error}</p>}
+
+        {/* Submit Button */}
         <button
           type="submit"
           disabled={isLoading}
-          className="w-full bg-blue-600 text-white rounded-md py-2 hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed"
+          className={`mt-5 tracking-wide font-semibold w-full py-4 rounded-lg transition-all duration-300 ease-in-out flex items-center justify-center ${isLoading ? 'bg-gray-400 cursor-not-allowed' : 'bg-black hover:bg-black/80 text-gray-100'
+            }`}
         >
           {isLoading ? 'Signing in...' : 'Sign in'}
         </button>
