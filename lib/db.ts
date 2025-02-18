@@ -1,10 +1,15 @@
 import QuickLRU from "quick-lru"
-import type { User } from "@/types"
+import type { User, UnsplashToken } from "@/types"
 
-const userDb = new QuickLRU<string, User>({ maxSize: 1000 })
-const likesDb = new QuickLRU<string, { userId: string; photoId: string }>({ maxSize: 1000 })
+// extand User type to include optional Unsplash token
+interface UserWithToken extends User {
+    unsplashToken?: UnsplashToken;
 
-// Initialize sample users
+}
+
+const userDb = new QuickLRU<string, UserWithToken>({ maxSize: 1000 })
+
+// iniztal sample users
 function initUsers() {
     const users: User[] = [
         { id: "muser1", username: "muser1", password: "mpassword1", isBlocked: false },
@@ -12,20 +17,25 @@ function initUsers() {
         { id: "muser3", username: "muser3", password: "mpassword3", isBlocked: true },
     ]
 
-
     try {
-
         for (const user of users) {
-            userDb.set(user.id, user)
+            userDb.set(user.username, user)
         }
-
-
     } catch (error) {
-        console.error('Error initializing users:', error);
+        console.error('Error initializing users:', error)
     }
+}
+
+// Enhanced database operations
+const enhancedDb = {
+    get: (username: string): UserWithToken | undefined => {
+        return userDb.get(username)
+    },
+
+
+
 }
 
 initUsers()
 
-export { userDb, likesDb }
-
+export { enhancedDb as userDb }
