@@ -1,5 +1,28 @@
 import { LoginForm } from "@/features/login/components/Login-form";
-
+import TestimonialSlider from "@/features/login/components/TestimonialSlider";
+const testimonials = [
+  {
+    quote: "We've been using Untitled to kick start every new project and can't imagine working without it.",
+    author: "Andi Lane",
+    role: "Founder, Catalog",
+    company: "Web Design Agency",
+    rating: 5
+  },
+  {
+    quote: "The best solution for anyone who wants to work a flexible schedule but still earn a full-time income.",
+    author: "Sarah Chen",
+    role: "CEO, TechStart",
+    company: "Software Company",
+    rating: 5
+  },
+  {
+    quote: "This platform has transformed how we approach our projects and collaborate with clients.",
+    author: "Michael Roberts",
+    role: "Director, CreativeHub",
+    company: "Design Studio",
+    rating: 5
+  }
+];
 export default function Home() {
   return (
     <div className="min-h-screen bg-gray-100 text-gray-900 flex justify-center">
@@ -27,19 +50,11 @@ export default function Home() {
           >
 
 
-            <div className="h-1/4  absolute bottom-8 flex-shrink-0 
-                        backdrop-filter backdrop-blur-lg w-full p-8 rounded-lg text-white" >
+            
 
+              <TestimonialSlider testimonials={testimonials} />
 
-
-              <div className="text-2xl font-medium mb-4">
-                "We've been using Untitled to kick start every new project and can't imagine working without it."
-              </div>
-
-
-
-
-            </div>
+   
 
 
           </div>

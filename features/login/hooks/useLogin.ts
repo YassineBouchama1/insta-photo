@@ -6,7 +6,7 @@ import { z } from 'zod';
 type LoginCredentials = z.infer<typeof loginSchema>;
 
 export function useLogin() {
-  // This mutation interacts with the API
+  // this mutation interacts with the API
   const mutation = useMutation({
     mutationFn: async (credentials: LoginCredentials) => {
       const res = await fetch('/api/auth', {
@@ -17,29 +17,26 @@ export function useLogin() {
 
       if (!res.ok) {
         const errorData = await res.json();
-        throw new Error(errorData.error || 'Login failed');
+        throw new Error(errorData.error || 'Authentication failed. Please check your credentials.');
       }
 
       return res.json();
     },
   });
 
-  
   const login = useCallback(
     async (username: string, password: string) => {
       try {
         // Validate credentials using Zod schema
         const validatedCredentials = loginSchema.parse({ username, password });
-
         await mutation.mutateAsync(validatedCredentials);
       } catch (error) {
         if (error instanceof z.ZodError) {
           const validationErrors = error.errors.map((err) => err.message).join(', ');
           throw new Error(`Validation Error: ${validationErrors}`);
-        } else {
-         
-          throw error;
         }
+        // Re-throw other errors (like API errors)
+        throw error;
       }
     },
     [mutation.mutateAsync]
@@ -48,6 +45,6 @@ export function useLogin() {
   return {
     login,
     isLoading: mutation.isPending,
-    error: mutation.error?.message || null, 
+    error: mutation.error?.message || null,
   };
 }
