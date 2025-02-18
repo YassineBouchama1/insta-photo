@@ -3,6 +3,7 @@ import { redirect } from 'next/navigation';
 import { getPhotos } from '@/lib/unsplash';
 import { Header } from '@/components/Header';
 import type { Session } from '@/types';
+import { PhotoGrid } from '@/features/photos/components/PhotoGrid';
 
 
 // fetch user likes
@@ -38,7 +39,13 @@ export default async function GalleryPage() {
     return (
         <div className="min-h-screen bg-gray-100">
             <Header username={session.user.username} />
-            {/* TODO : i will add galery list here */}
+            <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+                <PhotoGrid
+                    initialPhotos={photos.photos}
+                    initialLikes={likes}
+                    userId={session.user.id}
+                />
+            </main>
         </div>
     );
 }
