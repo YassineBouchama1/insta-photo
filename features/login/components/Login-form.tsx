@@ -33,26 +33,26 @@ export function LoginForm({ callbackUrl = '/gallery' }: LoginFormProps) {
     <div className="mx-auto max-w-xs h-full">
       <h1 className="text-3xl font-bold mb-2 text-left">Welcome back</h1>
       <p className="text-gray-600 mb-8 text-left">Welcome back! Please enter your details.</p>
-      <form onSubmit={handleSubmit} className='flex flex-col gap-52' >
+      <form onSubmit={handleSubmit}  >
         {/* Email Input */}
         <div className="mt-10">
-          <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="email">
-            Email Address
+          <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="username">
+            Username
           </label>
           <input
-            id="email"
-            type="email"
+            id="username"
+            type="text"
             value={username}
             onChange={(e) => setUsername(e.target.value)}
             className="w-full px-8 py-4 rounded-lg font-medium bg-gray-50 border border-gray-200 placeholder-gray-50 text-sm focus:outline-none focus:border-gray-400 focus:bg-white"
-            placeholder="Email"
+            placeholder="UserName"
             required
             disabled={isLoading}
           />
         </div>
 
         {/* Password Input */}
-        <div className="mt-10">
+        <div className="mt-4">
           <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="password">
             Password
           </label>

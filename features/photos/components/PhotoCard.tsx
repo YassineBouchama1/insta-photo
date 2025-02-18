@@ -8,10 +8,10 @@ interface PhotoCardProps {
         user: { name: string };
     };
     isLiked: boolean;
-
+    onToggleLike: () => void;
 }
 
-export function PhotoCard({ photo, isLiked }: PhotoCardProps) {
+export function PhotoCard({ photo, isLiked, onToggleLike }: PhotoCardProps) {
     return (
         <div className="relative group">
             <img
@@ -21,7 +21,7 @@ export function PhotoCard({ photo, isLiked }: PhotoCardProps) {
             />
             <div className="absolute inset-0 bg-black opacity-0 group-hover:opacity-20 transition-opacity rounded-lg" />
             <button
-
+                onClick={onToggleLike}
                 className="absolute bottom-4 right-4 bg-white p-2 rounded-full shadow-lg transform transition-transform group-hover:scale-110"
                 aria-label={isLiked ? 'Unlike photo' : 'Like photo'}
             >

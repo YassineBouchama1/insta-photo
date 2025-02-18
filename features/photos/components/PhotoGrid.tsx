@@ -1,5 +1,5 @@
 'use client';
-import { useState, useEffect } from 'react';
+import {  useEffect } from 'react';
 import { useInView } from 'react-intersection-observer';
 import { PhotoCard } from './PhotoCard';
 import { UnsplashPhoto } from '@/types';
@@ -21,7 +21,7 @@ export function PhotoGrid({ initialPhotos, initialLikes, userId }: PhotoGridProp
         hasNextPage,
         fetchNextPage,
         isFetchingNextPage,
-    
+        handleLike,
     } = usePhotoGrid({ initialPhotos, initialLikes, userId });
 
     const { ref, inView } = useInView();
@@ -38,12 +38,12 @@ export function PhotoGrid({ initialPhotos, initialLikes, userId }: PhotoGridProp
 
     return (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {photos.map((photo:UnsplashPhoto) => (
+            {photos.map((photo: UnsplashPhoto) => (
                 <PhotoCard
                     key={photo.id}
                     photo={photo}
                     isLiked={likes.has(photo.id)}
-                   
+                    onToggleLike={() => handleLike(photo.id)}
                 />
             ))}
             {isLoading && (
