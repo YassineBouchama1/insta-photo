@@ -1,7 +1,8 @@
 import type { NextConfig } from "next";
+const { envConfig } = require("./lib/env")
 
 const nextConfig: NextConfig = {
-  /* config options here */
+  env: envConfig,
 };
 
 export default nextConfig;

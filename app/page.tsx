@@ -19,12 +19,35 @@ export default function Home() {
         </div>
         <div className="flex-1 bg-indigo-100 text-center hidden lg:flex">
           <div
-            className=" w-full bg-cover bg-center bg-no-repeat"
+            className=" w-full bg-cover bg-center bg-no-repeat relative flex items-end"
             style={{
               backgroundImage:
                 'url("auth/hero.jpg")'
             }}
-          ></div>
+          >
+
+
+            <div className="h-1/4  absolute bottom-8 flex-shrink-0 
+                        backdrop-filter backdrop-blur-lg w-full p-8 rounded-lg text-white" >
+
+
+
+              <div className="text-2xl font-medium mb-4">
+                "We've been using Untitled to kick start every new project and can't imagine working without it."
+              </div>
+
+
+
+
+            </div>
+
+
+          </div>
+
+
+
+
+
         </div>
       </div>
     </div>
