@@ -1,5 +1,6 @@
 import { useCallback, useState } from 'react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import toast from 'react-hot-toast';
 
 interface UseLikeHandlerProps {
     userId: string | null;
@@ -35,6 +36,9 @@ export function useLikeHandler({
         onSuccess: () => {
             //  after  update like invalid photos
             queryClient.invalidateQueries({ queryKey: ['photos'] });
+
+
+
         },
         onError: (error) => {
             console.error('Failed to toggle like:', error);
@@ -47,6 +51,8 @@ export function useLikeHandler({
             if (!userId) return;
 
 
+            // dtermine if the photo is currently liked
+            const isLiked = likes.has(photoId);
             setLikes((prev) => {
                 const newLikes = new Set(prev);
                 if (newLikes.has(photoId)) {
@@ -56,6 +62,12 @@ export function useLikeHandler({
                 }
                 return newLikes;
             });
+
+            if (isLiked) {
+                toast.success('Unliked Successfully!');
+            } else {
+                toast.success('Liked Successfully!');
+            }
 
             // Trigger the mutation
             toggleLikeMutation.mutate(

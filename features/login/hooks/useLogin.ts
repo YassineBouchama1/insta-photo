@@ -1,4 +1,3 @@
-
 import { loginSchema } from '@/schemas/oginSchema';
 import { useMutation } from '@tanstack/react-query';
 import { useCallback } from 'react';
@@ -7,12 +6,7 @@ import { z } from 'zod';
 type LoginCredentials = z.infer<typeof loginSchema>;
 
 export function useLogin() {
-
-
-  //TODO : i will dsiplay eror with nice way
-
-
-  // this is mutatio  to intract with api
+  // This mutation interacts with the API
   const mutation = useMutation({
     mutationFn: async (credentials: LoginCredentials) => {
       const res = await fetch('/api/auth', {
@@ -20,33 +14,40 @@ export function useLogin() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(credentials),
       });
+
       if (!res.ok) {
         const errorData = await res.json();
         throw new Error(errorData.error || 'Login failed');
       }
+
       return res.json();
     },
   });
 
-
+  
   const login = useCallback(
     async (username: string, password: string) => {
       try {
+        // Validate credentials using Zod schema
         const validatedCredentials = loginSchema.parse({ username, password });
+
         await mutation.mutateAsync(validatedCredentials);
       } catch (error) {
         if (error instanceof z.ZodError) {
-          throw new Error(error.errors[0]?.message || 'Validation failed');
+          const validationErrors = error.errors.map((err) => err.message).join(', ');
+          throw new Error(`Validation Error: ${validationErrors}`);
+        } else {
+         
+          throw error;
         }
-        throw error;
       }
     },
-    [mutation.mutateAsync] 
+    [mutation.mutateAsync]
   );
 
   return {
     login,
     isLoading: mutation.isPending,
-    error: mutation.error?.message,
+    error: mutation.error?.message || null, 
   };
 }
