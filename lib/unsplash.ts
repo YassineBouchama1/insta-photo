@@ -15,7 +15,7 @@ const createUnsplashApi = (accessToken?: string) => {
 
     return {
         // Fetch a list of photos
-        async getPhotos(page: number = 1, perPage: number = 12): Promise<PhotosResponse> {
+        async getPhotos(page: number = 1, perPage: number = 4): Promise<PhotosResponse> {
             try {
                 const response = await unsplashAxios.get('/photos', {
                     params: { page, per_page: perPage },
@@ -36,8 +36,24 @@ const createUnsplashApi = (accessToken?: string) => {
             }
         },
 
+        async getPhotoById(photoId: string): Promise<UnsplashPhoto> {
+            try {
+                const response = await unsplashAxios.get(`/photos/${photoId}`);
+                if (response.status !== 200) {
+                    throw new Error('Failed to fetch photo');
+                }
+                return response.data as UnsplashPhoto;
+            } catch (error: any) {
+                const errorMessage = error.response?.data?.errors?.[0] || error.message;
+                console.error("Error fetching photo:", errorMessage);
+                throw new Error(`Failed to fetch photo: ${errorMessage}`);
+            }
+        },
+
+
         // Like a photo
         async likePhoto(photoId: string): Promise<void> {
+            console.log('like')
             if (!accessToken) {
                 throw new Error('Authentication required to like photos');
             }
