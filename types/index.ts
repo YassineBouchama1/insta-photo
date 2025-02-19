@@ -3,6 +3,7 @@ export interface User {
     username: string;
     password: string;
     isBlocked: boolean;
+    loginAttempts:number
 }
 
 export interface Session {

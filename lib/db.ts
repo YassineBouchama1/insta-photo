@@ -12,9 +12,9 @@ const userDb = new QuickLRU<string, UserWithToken>({ maxSize: 1000 })
 // iniztal sample users
 function initUsers() {
     const users: User[] = [
-        { id: "muser1", username: "muser1", password: "mpassword1", isBlocked: false },
-        { id: "muser2", username: "muser2", password: "mpassword2", isBlocked: false },
-        { id: "muser3", username: "muser3", password: "mpassword3", isBlocked: true },
+        { id: "muser1", username: "muser1", password: "mpassword1", isBlocked: false, loginAttempts: 0 },
+        { id: "muser2", username: "muser2", password: "mpassword2", isBlocked: false, loginAttempts: 0 },
+        { id: "muser3", username: "muser3", password: "mpassword3", isBlocked: true, loginAttempts: 3 },
     ]
 
     try {

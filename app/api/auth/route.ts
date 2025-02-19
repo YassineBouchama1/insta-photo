@@ -3,12 +3,14 @@ import { cookies } from "next/headers"
 import { userDb } from "@/lib/db"
 import type { ApiResponse, Session } from "@/types"
 
+const MAX_LOGIN_ATTEMPTS = 3
+
 export async function POST(request: Request) {
     try {
         const { username, password } = await request.json()
         const user = userDb.get(username)
 
-        if (!user || user.password !== password) {
+        if (!user) {
             return NextResponse.json<ApiResponse<never>>({
                 error: "Invalid login information"
             }, { status: 401 })
@@ -20,22 +22,33 @@ export async function POST(request: Request) {
             }, { status: 403 })
         }
 
-        const unsplashAuthUrl = `https://unsplash.com/oauth/authorize?` +
+        if (user.password !== password) {
+            // incemnt failed login attempts
+            user.loginAttempts = (user.loginAttempts || 0) + 1
+
+            if (user.loginAttempts >= MAX_LOGIN_ATTEMPTS) {
+                user.isBlocked = true
+                return NextResponse.json<ApiResponse<never>>({
+                    error: "This account has been blocked due to multiple failed login attempts."
+                }, { status: 403 })
+            }
+
+            return NextResponse.json<ApiResponse<never>>({
+                error: "Invalid login information"
+            }, { status: 401 })
+        }
+
+        // rest login attempts in successful login
+        user.loginAttempts = 0
+
+        // Generate Unsplash auth URL if user doesn't have a token
+        const unsplashAuthUrl = !user.unsplashToken
+            ? `https://unsplash.com/oauth/authorize?` +
             `client_id=${process.env.UNSPLASH_ACCESS_KEY}` +
             `&redirect_uri=${encodeURIComponent(process.env.NEXT_PUBLIC_BASE_URL + '/api/unsplash/callback')}` +
             `&response_type=code` +
             `&scope=public+write_likes`
-
-        // Generate Unsplash auth URL if user doesn't have a token
-        // const unsplashAuthUrl = !user.unsplashToken
-        //     ? `https://unsplash.com/oauth/authorize?` +
-        //     `client_id=${process.env.UNSPLASH_ACCESS_KEY}` +
-        //     `&redirect_uri=${encodeURIComponent(process.env.NEXT_PUBLIC_BASE_URL + '/api/unsplash/callback')}` +
-        //     `&response_type=code` +
-        //     `&scope=public+write_likes`
-        //     : null;
-
-     
+            : null;
 
         const session: Session = {
             user: {
@@ -55,8 +68,6 @@ export async function POST(request: Request) {
                 unsplashAuthUrl
             }
         })
-
-
 
         const cookieStore = await cookies()
         cookieStore.set({
