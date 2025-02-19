@@ -1,5 +1,4 @@
 'use client';
-
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import { UnsplashPhoto } from '@/types';
@@ -57,23 +56,6 @@ export function ImageModal({ photo }: { photo: UnsplashPhoto }) {
                 </div>
 
                 <div className="flex justify-between items-center mt-4">
-                    <div className="flex items-center space-x-2">
-                        {photo.user && (
-                            <>
-                                <Image
-                                    src={photo.user.profile_image}
-                                    alt={photo.user.name}
-                                    width={32}
-                                    height={32}
-                                    className="rounded-full"
-                                />
-                                <div className="text-sm">
-                                    <p className="font-medium">{photo.user.name}</p>
-                                    <p className="text-gray-500">@{photo.user.name}</p>
-                                </div>
-                            </>
-                        )}
-                    </div>
 
                     <button
                         onClick={() => router.back()}

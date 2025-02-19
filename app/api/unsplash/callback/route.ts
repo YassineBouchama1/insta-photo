@@ -1,7 +1,8 @@
 import { NextResponse } from "next/server"
 import { cookies } from "next/headers"
-import { userDb } from "@/lib/db"
+
 import type { ApiResponse, Session, UnsplashToken } from "@/types"
+import { envConfig } from "@/lib/env"
 
 export async function GET(request: Request) {
     try {
@@ -26,16 +27,16 @@ export async function GET(request: Request) {
 
         const session: Session = JSON.parse(sessionCookie.value)
 
-        console.log(session)
+
 
         // Exchange code for access token
         const tokenResponse = await fetch('https://unsplash.com/oauth/token', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
-                client_id: process.env.UNSPLASH_ACCESS_KEY,
-                client_secret: process.env.UNSPLASH_CLIENT_SECRET,
-                redirect_uri: `${process.env.NEXT_PUBLIC_BASE_URL}/api/unsplash/callback`,
+                client_id: envConfig.UNSPLASH_ACCESS_KEY,
+                client_secret: envConfig.UNSPLASH_CLIENT_SECRET,
+                redirect_uri: `${envConfig.NEXT_PUBLIC_BASE_URL}/api/unsplash/callback`,
                 code,
                 grant_type: 'authorization_code',
             }),

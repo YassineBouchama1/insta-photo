@@ -27,7 +27,7 @@ export default async function GalleryPage() {
             api.getPhotos(1),
         ]);
     } catch (err) {
-        error = "Unable to load photos. Please try again later.";
+        error = "Unable to load photos"
         photos = { photos: [], total: 0, hasMore: false };
     }
 
@@ -37,7 +37,7 @@ export default async function GalleryPage() {
             <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
                 {error ? (
                     <div className="text-center py-8 space-y-4">
-                        <p className="text-red-600">{error} or Limits End</p>
+                        <p className="text-red-600">{error} or Rate Limit Exceeded In Unsplash Account</p>
                         <form action="/gallery">
                             <button
                                 type="submit"

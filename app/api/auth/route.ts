@@ -2,6 +2,7 @@ import { NextResponse } from "next/server"
 import { cookies } from "next/headers"
 import { userDb } from "@/lib/db"
 import type { ApiResponse, Session } from "@/types"
+import { envConfig } from "@/lib/env"
 
 const MAX_LOGIN_ATTEMPTS = 3
 
@@ -44,8 +45,8 @@ export async function POST(request: Request) {
         // Generate Unsplash auth URL if user doesn't have a token
         const unsplashAuthUrl = !user.unsplashToken
             ? `https://unsplash.com/oauth/authorize?` +
-            `client_id=${process.env.UNSPLASH_ACCESS_KEY}` +
-            `&redirect_uri=${encodeURIComponent(process.env.NEXT_PUBLIC_BASE_URL + '/api/unsplash/callback')}` +
+            `client_id=${envConfig.UNSPLASH_ACCESS_KEY}` +
+            `&redirect_uri=${encodeURIComponent(envConfig.NEXT_PUBLIC_BASE_URL + '/api/unsplash/callback')}` +
             `&response_type=code` +
             `&scope=public+write_likes`
             : null;
