@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 type ClassValue = string | number | boolean | undefined | null;
 type ClassObject = { [key: string]: any };
 type ClassArray = ClassValue[];

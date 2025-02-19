@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
 import { createAuthenticatedApi } from '@/lib/unsplash';

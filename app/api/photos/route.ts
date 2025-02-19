@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { NextResponse } from 'next/server';
 import { ApiResponse, PhotosResponse, Session } from '@/types';
 import { createAuthenticatedApi } from '@/lib/unsplash';

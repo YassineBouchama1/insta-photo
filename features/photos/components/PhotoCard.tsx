@@ -23,7 +23,6 @@ export function PhotoCard({
     if (isLikeLoading) return;
     await onToggleLike();
 
-    toast.success(`${isLiked ? 'Liked successfully' : 'Liked successfully'}`)
   };
 
   return (

@@ -4,7 +4,7 @@ const { envConfig } = require("./lib/env")
 const nextConfig: NextConfig = {
   env: envConfig,
   images: {
-    domains: ['images.unsplash.com'],
+    domains: ['images.unsplash.com', 'ui-avatars.com'],
   },
 };
 

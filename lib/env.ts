@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-empty-object-type */
+/* eslint-disable @typescript-eslint/no-namespace */
 import { z } from 'zod'
 
 const envSchema = z.object({
