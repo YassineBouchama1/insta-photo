@@ -1,7 +1,6 @@
 import { useCallback, useState } from 'react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { createAuthenticatedApi, unsplashApi } from '@/lib/unsplash';
-import { userDb } from "@/lib/db";
+import { createAuthenticatedApi } from '@/lib/unsplash';
 import { getServerSession } from '@/lib/session';
 
 interface UseLikeHandlerProps {
@@ -43,6 +42,7 @@ export function useLikeHandler({
             setLoadingPhotoIds(prev => prev.filter(id => id !== variables.photoId));
             // Invalidate the photos query to refetch updated data
             queryClient.invalidateQueries({ queryKey: ['photos'] });
+          
         },
         onError: (_, variables) => {
             // Remove photoId from loading state on error

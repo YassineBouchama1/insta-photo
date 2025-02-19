@@ -3,6 +3,7 @@
 import { UnsplashPhoto } from '@/types';
 import { Heart, Loader } from 'lucide-react';
 import Link from 'next/link';
+import toast from 'react-hot-toast';
 
 interface PhotoCardProps {
   photo: UnsplashPhoto;
@@ -21,6 +22,8 @@ export function PhotoCard({
     e.preventDefault();
     if (isLikeLoading) return;
     await onToggleLike();
+
+    toast.success(`${isLiked ? 'Liked successfully' : 'Liked successfully'}`)
   };
 
   return (

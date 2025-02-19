@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import { ApiResponse, PhotosResponse, Session } from '@/types';
-import { createAuthenticatedApi, unsplashApi } from '@/lib/unsplash';
+import { createAuthenticatedApi } from '@/lib/unsplash';
 import { cookies } from 'next/headers';
 
 export async function GET(request: Request) {

@@ -16,7 +16,7 @@ export default function Home() {
             >
                 <div className="absolute bottom-8 left-8 right-8 bg-white bg-opacity-90 p-8 rounded-lg">
                     <div className="text-2xl font-medium mb-4">
-                        "We've been using Untitled to kick start every new project and can't imagine working without it."
+                        &quot;We&apos;ve been using Untitled to kick start every new project and can&apos;t imagine working without it.&quot;
                     </div>
                     <div className="flex justify-between items-end">
                         <div>
@@ -29,6 +29,5 @@ export default function Home() {
                 </div>
             </div>
         </div>
-    )
+    );
 }
-
