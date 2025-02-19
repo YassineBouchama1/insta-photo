@@ -2,15 +2,13 @@ import { UseInfiniteQueryResult, useInfiniteQuery } from '@tanstack/react-query'
 import { UnsplashPhoto, PhotosResponse, ApiResponse } from '@/types';
 import { useLikeHandler } from './useLikeHandler';
 
-
 interface UsePhotoGridProps {
     initialPhotos: UnsplashPhoto[];
     userId: string | null;
 }
 
 export function usePhotoGrid({ initialPhotos, userId }: UsePhotoGridProps) {
-    const { handleLike } = useLikeHandler({ userId });
-
+    const { handleLike, loadingPhotoIds } = useLikeHandler({ userId });
 
     // Fetch photos with pagination support
     const fetchPhotos = async ({ pageParam = 1 }: { pageParam?: number }): Promise<PhotosResponse> => {
@@ -25,7 +23,6 @@ export function usePhotoGrid({ initialPhotos, userId }: UsePhotoGridProps) {
         return data.data;
     };
 
-    /// here i handle inifite scrole
     const {
         data,
         isLoading,
@@ -47,18 +44,12 @@ export function usePhotoGrid({ initialPhotos, userId }: UsePhotoGridProps) {
             }],
             pageParams: [1],
         } as unknown as { pages: PhotosResponse[], pageParams: number[] },
-
     });
-
-
-
-
 
     const photos = data?.pages.flatMap((page) => page.photos) || [];
 
     return {
         photos,
-
         isLoading,
         isError,
         error,
@@ -66,7 +57,6 @@ export function usePhotoGrid({ initialPhotos, userId }: UsePhotoGridProps) {
         fetchNextPage,
         isFetchingNextPage,
         handleLike,
-
-
+        loadingPhotoIds
     };
 }
