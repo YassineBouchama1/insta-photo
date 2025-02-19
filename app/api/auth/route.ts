@@ -35,7 +35,7 @@ export async function POST(request: Request) {
         //     `&scope=public+write_likes`
         //     : null;
 
-        console.log(unsplashAuthUrl)
+     
 
         const session: Session = {
             user: {

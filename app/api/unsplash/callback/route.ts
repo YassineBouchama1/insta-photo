@@ -26,6 +26,8 @@ export async function GET(request: Request) {
 
         const session: Session = JSON.parse(sessionCookie.value)
 
+        console.log(session)
+
         // Exchange code for access token
         const tokenResponse = await fetch('https://unsplash.com/oauth/token', {
             method: 'POST',
